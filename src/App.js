@@ -1,9 +1,10 @@
 import "./styles/AppTest.css"
-import {useState} from "react";
+import {useMemo, useState} from "react";
 import PostList from "./components/PostList";
 import MyForm from "./components/MyForm";
 import MySelect from "./components/ui/select/MySelect";
 import MyInput from "./components/ui/input/MyInput";
+import MyFilter from "./components/ui/MyFilter";
 
 function App() {
 
@@ -13,22 +14,19 @@ function App() {
         {id: 3, title: "CA", body: "AB"},
     ])
 
-    const [selectedSort, setSelectedSort] = useState("")
-    const [searchQuery, setSearchQuery] = useState("")
+    const [filter, setFilter] = useState({query: "", sort: ""})
 
-    const getSortedPosts = () => {
+    const sortedPosts = useMemo(() => {
         console.log("KEK!")
-        if (selectedSort) {
-            return [...posts].sort((a, b) => a[selectedSort].localeCompare(b[selectedSort]))
+        if (filter.sort) {
+            return [...posts].sort((a, b) => a[filter.sort].localeCompare(b[filter.sort]))
         }
         return posts
-    }
+    }, [posts, filter.sort])
 
-    const sortedPosts = getSortedPosts()
-
-    const sortPosts = (sort) => {
-        setSelectedSort(sort)
-    }
+    const filteredPosts = useMemo(() => {
+        return sortedPosts.filter(post => post.title.toLowerCase().includes(filter.query.toLowerCase()))
+    }, [filter.query, sortedPosts])
 
     const createPost = (newPost) => {
         setPosts([...posts, newPost])
@@ -42,23 +40,8 @@ function App() {
         <div className="App">
             <MyForm create={createPost}/>
             <hr style={{margin: "15px 0"}}/>
-            <div>
-                <MyInput
-                    value={searchQuery}
-                    onChange={e => setSearchQuery(e.target.value)}
-                    placeholder="Search posts"
-                />
-                <MySelect
-                    defaultOption="Sort by"
-                    value={selectedSort}
-                    onChange={sortPosts}
-                    options={[
-                        {value: "title", name: "By title"},
-                        {value: "body", name: "By description"}
-                    ]}
-                />
-            </div>
-            <PostList remove={deletePost} title="Posts" posts={sortedPosts}/>
+            <MyFilter filter={filter} setFilter={setFilter}/>
+            <PostList remove={deletePost} title="Posts" posts={filteredPosts}/>
         </div>
     );
 }
