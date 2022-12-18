@@ -1,0 +1,17 @@
+.myBtn{
+    padding: 5px 15px;
+    color: teal;
+    font-size: 14px;
+    background: transparent;
+    border: 1px solid teal;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.myBtn:hover{
+    filter: brightness(150%);
+}
+
+.myBtn:active{
+    filter: brightness(70%);
+}
