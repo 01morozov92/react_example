@@ -24,7 +24,7 @@ function App() {
     };
 
     const deletePost = (post) => {
-        setPosts([...posts].filter(p => p.id !== post.id))
+        setPosts(posts.filter(p => p.id !== post.id))
     };
 
     return (
