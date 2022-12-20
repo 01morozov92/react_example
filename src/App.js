@@ -2,8 +2,6 @@ import "./styles/AppTest.css"
 import {useMemo, useState} from "react";
 import PostList from "./components/PostList";
 import MyForm from "./components/MyForm";
-import MySelect from "./components/ui/select/MySelect";
-import MyInput from "./components/ui/input/MyInput";
 import MyFilter from "./components/ui/MyFilter";
 
 function App() {

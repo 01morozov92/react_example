@@ -13,7 +13,7 @@ const MyFilter = ({filter, setFilter}) => {
             <MySelect
                 defaultOption="Sort by"
                 value={filter.sort}
-                onChange={selectedSort => setFilter({...filter, filter: selectedSort})}
+                onChange={selectedSort => setFilter({...filter, sort: selectedSort})}
                 options={[
                     {value: "title", name: "By title"},
                     {value: "body", name: "By description"}
