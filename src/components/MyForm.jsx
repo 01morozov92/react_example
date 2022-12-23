@@ -4,33 +4,33 @@ import MyButton from "./ui/button/MyButton";
 
 const MyForm = ({create}) => {
 
-    const [post, setPost] = useState({title: "", body: ""})
+    const [user, setUser] = useState({name: "", age: ""})
 
-    const addNewPost = (event) => {
+    const addNewUser = (event) => {
         event.preventDefault()
-        const newPost = {
-            ...post, id: Date.now()
+        const newUser = {
+            ...user, id: Date.now()
         }
-        create(newPost)
-        setPost({
-            title: "",
-            body: ""
+        create(newUser)
+        setUser({
+            name: "",
+            age: ""
         })
     };
 
     return (
         <form>
             <MyInput
-                value={post.title}
-                onChange={event => setPost({...post, title: event.target.value})}
-                placeholder="Title" type="text"
+                value={user.name}
+                onChange={event => setUser({...user, name: event.target.value})}
+                placeholder="name" type="text"
             />
             <MyInput
-                value={post.body}
-                onChange={event => setPost({...post, body: event.target.value})}
-                placeholder="Description" type="text"
+                value={user.age}
+                onChange={event => setUser({...user, age: event.target.value})}
+                placeholder="age" type="text"
             />
-            <MyButton onClick={addNewPost}>Add post</MyButton>
+            <MyButton onClick={addNewUser}>Add user</MyButton>
         </form>
     );
 };

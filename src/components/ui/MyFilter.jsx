@@ -8,15 +8,15 @@ const MyFilter = ({filter, setFilter}) => {
             <MyInput
                 value={filter.query}
                 onChange={e => setFilter({...filter, query: e.target.value})}
-                placeholder="Search posts"
+                placeholder="Search users"
             />
             <MySelect
                 defaultOption="Sort by"
                 value={filter.sort}
                 onChange={selectedSort => setFilter({...filter, sort: selectedSort})}
                 options={[
-                    {value: "title", name: "By title"},
-                    {value: "body", name: "By description"}
+                    {value: "name", name: "By name"},
+                    {value: "age", name: "By age"}
                 ]}
             />
         </div>

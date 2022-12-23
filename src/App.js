@@ -8,47 +8,47 @@ import MyButton from "./components/ui/button/MyButton";
 
 function App() {
 
-    const [posts, setPosts] = useState([
-        {id: 1, title: "AB", body: "BA"},
-        {id: 2, title: "BA", body: "CA"},
-        {id: 3, title: "CA", body: "AB"},
+    const [users, setUsers] = useState([
+        {id: 1, name: "AB", age: "BA"},
+        {id: 2, name: "BA", age: "CA"},
+        {id: 3, name: "CA", age: "AB"},
     ])
 
     const [filter, setFilter] = useState({query: "", sort: ""})
     const [modalVisible, setModalVisible] = useState(false)
 
-    const sortedPosts = useMemo(() => {
+    const sortedUsers = useMemo(() => {
         console.log("KEK!")
         if (filter.sort) {
-            return [...posts].sort((a, b) => a[filter.sort].localeCompare(b[filter.sort]))
+            return [...users].sort((a, b) => a[filter.sort].localeCompare(b[filter.sort]))
         }
-        return posts
-    }, [posts, filter.sort])
+        return users
+    }, [users, filter.sort])
 
-    const filteredPosts = useMemo(() => {
-        return sortedPosts.filter(post => post.title.toLowerCase().includes(filter.query.toLowerCase()))
-    }, [filter.query, sortedPosts])
+    const filteredUsers = useMemo(() => {
+        return sortedUsers.filter(post => post.name.toLowerCase().includes(filter.query.toLowerCase()))
+    }, [filter.query, sortedUsers])
 
-    const createPost = (newPost) => {
-        setPosts([...posts, newPost])
+    const createUser = (newPost) => {
+        setUsers([...users, newPost])
         setModalVisible(false)
     };
 
-    const deletePost = (post) => {
-        setPosts(posts.filter(p => p.id !== post.id))
+    const deleteUser = (user) => {
+        setUsers(users.filter(p => p.id !== user.id))
     };
 
     return (
         <div className="App">
             <MyButton onClick={() => setModalVisible(true)}>
-                Create post
+                Create user
             </MyButton>
             <MyModal visible={modalVisible} setVisible={setModalVisible}>
-                <MyForm create={createPost}/>
+                <MyForm create={createUser}/>
             </MyModal>
             <hr style={{margin: "15px 0"}}/>
             <MyFilter filter={filter} setFilter={setFilter}/>
-            <PostList remove={deletePost} title="Posts" posts={filteredPosts}/>
+            <PostList remove={deleteUser} name="Users" users={filteredUsers}/>
         </div>
     );
 }
