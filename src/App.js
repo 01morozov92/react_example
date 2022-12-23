@@ -3,6 +3,8 @@ import {useMemo, useState} from "react";
 import PostList from "./components/PostList";
 import MyForm from "./components/MyForm";
 import MyFilter from "./components/ui/MyFilter";
+import MyModal from "./components/ui/modal/MyModal";
+import MyButton from "./components/ui/button/MyButton";
 
 function App() {
 
@@ -13,6 +15,7 @@ function App() {
     ])
 
     const [filter, setFilter] = useState({query: "", sort: ""})
+    const [modalVisible, setModalVisible] = useState(false)
 
     const sortedPosts = useMemo(() => {
         console.log("KEK!")
@@ -28,6 +31,7 @@ function App() {
 
     const createPost = (newPost) => {
         setPosts([...posts, newPost])
+        setModalVisible(false)
     };
 
     const deletePost = (post) => {
@@ -36,7 +40,12 @@ function App() {
 
     return (
         <div className="App">
-            <MyForm create={createPost}/>
+            <MyButton onClick={() => setModalVisible(true)}>
+                Create post
+            </MyButton>
+            <MyModal visible={modalVisible} setVisible={setModalVisible}>
+                <MyForm create={createPost}/>
+            </MyModal>
             <hr style={{margin: "15px 0"}}/>
             <MyFilter filter={filter} setFilter={setFilter}/>
             <PostList remove={deletePost} title="Posts" posts={filteredPosts}/>
