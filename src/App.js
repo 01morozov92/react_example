@@ -5,6 +5,7 @@ import MyForm from "./components/MyForm";
 import MyFilter from "./components/ui/MyFilter";
 import MyModal from "./components/ui/modal/MyModal";
 import MyButton from "./components/ui/button/MyButton";
+import {useSortedUsers, useUsers} from "./components/hooks/useUsers";
 
 function App() {
 
@@ -16,18 +17,7 @@ function App() {
 
     const [filter, setFilter] = useState({query: "", sort: ""})
     const [modalVisible, setModalVisible] = useState(false)
-
-    const sortedUsers = useMemo(() => {
-        console.log("KEK!")
-        if (filter.sort) {
-            return [...users].sort((a, b) => a[filter.sort].localeCompare(b[filter.sort]))
-        }
-        return users
-    }, [users, filter.sort])
-
-    const filteredUsers = useMemo(() => {
-        return sortedUsers.filter(post => post.name.toLowerCase().includes(filter.query.toLowerCase()))
-    }, [filter.query, sortedUsers])
+    const filteredUsers = useUsers(users, filter.sort, filter.query)
 
     const createUser = (newPost) => {
         setUsers([...users, newPost])
