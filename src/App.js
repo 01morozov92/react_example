@@ -1,36 +1,45 @@
 import "./styles/AppTest.css"
-import {useMemo, useState} from "react";
-import PostList from "./components/PostList";
+import {useEffect, useState} from "react";
+import UserList from "./components/UserList";
 import MyForm from "./components/MyForm";
 import MyFilter from "./components/ui/MyFilter";
 import MyModal from "./components/ui/modal/MyModal";
 import MyButton from "./components/ui/button/MyButton";
-import {useSortedUsers, useUsers} from "./components/hooks/useUsers";
+import {useUsers} from "./components/hooks/useUsers";
+import UserService from "./components/api/UserService";
 
 function App() {
 
-    const [users, setUsers] = useState([
-        {id: 1, name: "AB", age: "BA"},
-        {id: 2, name: "BA", age: "CA"},
-        {id: 3, name: "CA", age: "AB"},
-    ])
+    const [users, setUsers] = useState([])
 
     const [filter, setFilter] = useState({query: "", sort: ""})
     const [modalVisible, setModalVisible] = useState(false)
     const filteredUsers = useUsers(users, filter.sort, filter.query)
 
-    const createUser = (newPost) => {
-        setUsers([...users, newPost])
+    useEffect(() => {
+        UserService.getAllUsers().then(response => setUsers(response.data))
+    }, [])
+
+    const createUser = (newUser) => {
+        UserService.addUser(newUser).then(response => {
+            console.log(response.data)
+            setUsers([...users, newUser])
+        })
         setModalVisible(false)
     };
 
     const deleteUser = (user) => {
-        setUsers(users.filter(p => p.id !== user.id))
+        UserService.deleteUser(user.id).then(response => {
+            console.log(response.data)
+            setUsers(users.filter(p => p.id !== user.id))
+        })
+
     };
 
     return (
         <div className="App">
-            <MyButton onClick={() => setModalVisible(true)}>
+            {/*<MyButton onClick={fetchUsers}>GET USERS</MyButton>*/}
+            <MyButton style={{marginTop: "10px"}} onClick={() => setModalVisible(true)}>
                 Create user
             </MyButton>
             <MyModal visible={modalVisible} setVisible={setModalVisible}>
@@ -38,7 +47,7 @@ function App() {
             </MyModal>
             <hr style={{margin: "15px 0"}}/>
             <MyFilter filter={filter} setFilter={setFilter}/>
-            <PostList remove={deleteUser} name="Users" users={filteredUsers}/>
+            <UserList remove={deleteUser} name="Users" users={filteredUsers}/>
         </div>
     );
 }

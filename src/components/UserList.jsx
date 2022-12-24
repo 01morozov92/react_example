@@ -1,7 +1,7 @@
 import React from 'react';
-import PostItem from "./PostItem";
+import UserItem from "./UserItem";
 
-const PostList = ({users, title, remove}) => {
+const UserList = ({users, title, remove}) => {
 
     if (!users.length){
         return <h1 style={{textAlign: "center"}}>Posts not found!</h1>
@@ -11,10 +11,10 @@ const PostList = ({users, title, remove}) => {
         <div>
             <h1 style={{textAlign: "center"}}>{title}</h1>
             {users.map((user, index) =>
-                <PostItem remove={remove} number={index + 1} user={user} key={user.id}/>
+                <UserItem remove={remove} number={index + 1} user={user} key={user.id}/>
             )}
         </div>
     );
 };
 
-export default PostList;
+export default UserList;
