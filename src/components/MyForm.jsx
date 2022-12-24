@@ -9,7 +9,7 @@ const MyForm = ({create}) => {
     const addNewUser = (event) => {
         event.preventDefault()
         const newUser = {
-            ...user, id: Date.now()
+            ...user
         }
         create(newUser)
         setUser({

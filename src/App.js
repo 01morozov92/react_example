@@ -11,14 +11,13 @@ import UserService from "./components/api/UserService";
 function App() {
 
     const [users, setUsers] = useState([])
-
     const [filter, setFilter] = useState({query: "", sort: ""})
     const [modalVisible, setModalVisible] = useState(false)
     const filteredUsers = useUsers(users, filter.sort, filter.query)
 
     useEffect(() => {
         UserService.getAllUsers().then(response => setUsers(response.data))
-    }, [])
+    }, [users])
 
     const createUser = (newUser) => {
         UserService.addUser(newUser).then(response => {
@@ -33,12 +32,10 @@ function App() {
             console.log(response.data)
             setUsers(users.filter(p => p.id !== user.id))
         })
-
     };
 
     return (
         <div className="App">
-            {/*<MyButton onClick={fetchUsers}>GET USERS</MyButton>*/}
             <MyButton style={{marginTop: "10px"}} onClick={() => setModalVisible(true)}>
                 Create user
             </MyButton>
