@@ -1,11 +1,13 @@
 import "./styles/App.css"
-import {useMemo, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import PostList from "./components/PostList";
 import MyForm from "./components/MyForm";
 import MyFilter from "./components/ui/MyFilter";
 import MyModal from "./components/ui/modal/MyModal";
 import MyButton from "./components/ui/button/MyButton";
 import {useFilter} from "./components/hooks/UseFilter";
+import axios from "axios";
+import PostService from "./api/PostsService";
 
 function App() {
 
@@ -13,6 +15,12 @@ function App() {
     const [modal, setModal] = useState(false)
     const [filter, setFilter] = useState({query: "", sort: ""})
     const filteredPosts = useFilter(posts, filter.sort, filter.query)
+
+    useEffect(async () => {
+        const posts = await PostService.getAll()
+            .then(response => response.data)
+        setPosts(posts)
+    }, [])
 
     const createPost = (newPost) => {
         setPosts([...posts, newPost])
