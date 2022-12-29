@@ -3,6 +3,8 @@ import {useMemo, useState} from "react";
 import PostList from "./components/PostList";
 import MyForm from "./components/MyForm";
 import MyFilter from "./components/ui/MyFilter";
+import MyModal from "./components/ui/modal/MyModal";
+import MyButton from "./components/ui/button/MyButton";
 
 function App() {
 
@@ -12,10 +14,11 @@ function App() {
         {id: 3, title: "CA", body: "AB"},
     ])
 
+    const [modal, setModal] = useState(false)
+
     const [filter, setFilter] = useState({query: "", sort: ""})
 
     const sortedPosts = useMemo(() => {
-        console.log("KEK!")
         if (filter.sort) {
             return [...posts].sort((a, b) => a[filter.sort].localeCompare(b[filter.sort]))
         }
@@ -28,6 +31,7 @@ function App() {
 
     const createPost = (newPost) => {
         setPosts([...posts, newPost])
+        setModal(false)
     };
 
     const deletePost = (post) => {
@@ -36,7 +40,12 @@ function App() {
 
     return (
         <div className="App">
-            <MyForm create={createPost}/>
+            <MyButton style={{marginTop: 15}} onClick={() => setModal(true)}>Add post</MyButton>
+            <MyModal
+                isActive={modal}
+                setActive={setModal}>
+                <MyForm create={createPost}/>
+            </MyModal>
             <hr style={{margin: "15px 0"}}/>
             <MyFilter filter={filter} setFilter={setFilter}/>
             <PostList remove={deletePost} title="Posts" posts={filteredPosts}/>
