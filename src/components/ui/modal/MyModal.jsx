@@ -15,7 +15,9 @@ const MyModal = ({isActive, setActive, children}) => {
 
     return (
         <div onClick={(() => setActive(false))} className={modalClasses.join(" ")}>
-            <div onClick={(e) => e.stopPropagation()}
+            <div onClick={(e) => {
+                e.stopPropagation()
+            }}
                  className={modalContentClasses.join(" ")}>
                 {children}
             </div>

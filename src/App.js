@@ -1,4 +1,4 @@
-import "./styles/AppTest.css"
+import "./styles/App.css"
 import {useMemo, useState} from "react";
 import PostList from "./components/PostList";
 import MyForm from "./components/MyForm";
