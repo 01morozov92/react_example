@@ -5,29 +5,14 @@ import MyForm from "./components/MyForm";
 import MyFilter from "./components/ui/MyFilter";
 import MyModal from "./components/ui/modal/MyModal";
 import MyButton from "./components/ui/button/MyButton";
+import {useFilter} from "./components/hooks/UseFilter";
 
 function App() {
 
-    const [posts, setPosts] = useState([
-        {id: 1, title: "AB", body: "BA"},
-        {id: 2, title: "BA", body: "CA"},
-        {id: 3, title: "CA", body: "AB"},
-    ])
-
+    const [posts, setPosts] = useState([])
     const [modal, setModal] = useState(false)
-
     const [filter, setFilter] = useState({query: "", sort: ""})
-
-    const sortedPosts = useMemo(() => {
-        if (filter.sort) {
-            return [...posts].sort((a, b) => a[filter.sort].localeCompare(b[filter.sort]))
-        }
-        return posts
-    }, [posts, filter.sort])
-
-    const filteredPosts = useMemo(() => {
-        return sortedPosts.filter(post => post.title.toLowerCase().includes(filter.query.toLowerCase()))
-    }, [filter.query, sortedPosts])
+    const filteredPosts = useFilter(posts, filter.sort, filter.query)
 
     const createPost = (newPost) => {
         setPosts([...posts, newPost])
