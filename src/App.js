@@ -6,11 +6,9 @@ import MyFilter from "./components/ui/MyFilter";
 import MyModal from "./components/ui/modal/MyModal";
 import MyButton from "./components/ui/button/MyButton";
 import {useFilter} from "./components/hooks/useFilter";
-import PostService from "./api/PostsService";
-import Loader from "./components/ui/loader/Loader";
+import PostsService from "./api/PostsService";
 import Loader2 from "./components/ui/loader/Loader2";
 import {useRequest} from "./components/hooks/useRequest";
-import PostsService from "./api/PostsService";
 
 function App() {
 
@@ -23,8 +21,8 @@ function App() {
         setPosts(posts)
     })
 
-    useEffect(async () => {
-        await getPosts()
+    useEffect(() => {
+        getPosts()
     }, [])
 
     const createPost = (newPost) => {
@@ -50,7 +48,8 @@ function App() {
                 postError &&
                 <h1>Error! ${postError}</h1>
             }
-            {loading ? <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+            {loading ?
+                <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
                     <Loader2/>
                 </div>
                 : <PostList remove={deletePost} title="Posts" posts={filteredPosts}/>
