@@ -5,10 +5,12 @@ import MyForm from "./components/MyForm";
 import MyFilter from "./components/ui/MyFilter";
 import MyModal from "./components/ui/modal/MyModal";
 import MyButton from "./components/ui/button/MyButton";
-import {useFilter} from "./components/hooks/UseFilter";
+import {useFilter} from "./components/hooks/useFilter";
 import PostService from "./api/PostsService";
 import Loader from "./components/ui/loader/Loader";
 import Loader2 from "./components/ui/loader/Loader2";
+import {useRequest} from "./components/hooks/useRequest";
+import PostsService from "./api/PostsService";
 
 function App() {
 
@@ -16,16 +18,13 @@ function App() {
     const [modal, setModal] = useState(false)
     const [filter, setFilter] = useState({query: "", sort: ""})
     const filteredPosts = useFilter(posts, filter.sort, filter.query)
-    const [loading, setLoading] = useState(false)
+    const [loading, postError, getPosts] = useRequest(async () => {
+        const posts = await PostsService.getAll().then(response => response.data)
+        setPosts(posts)
+    })
 
     useEffect(async () => {
-        setLoading(true)
-        setTimeout(async () => {
-            const posts = await PostService.getAll()
-                .then(response => response.data)
-            setPosts(posts)
-            setLoading(false)
-        }, 1000)
+        await getPosts()
     }, [])
 
     const createPost = (newPost) => {
@@ -47,6 +46,10 @@ function App() {
             </MyModal>
             <hr style={{margin: "15px 0"}}/>
             <MyFilter filter={filter} setFilter={setFilter}/>
+            {
+                postError &&
+                <h1>Error! ${postError}</h1>
+            }
             {loading ? <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
                     <Loader2/>
                 </div>
