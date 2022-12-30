@@ -13,7 +13,7 @@ const PostItem = ({post, number, remove}) => {
                 exit={{y: "50%", opacity: 0, transition: {duration: 0.3}}}
                 className="post">
                 <div className="post__content">
-                    <strong className="post-text">{number}. {post.title}</strong>
+                    <strong className="post-text">{post.id}. {post.title}</strong>
                     <div className="post-text">{post.body}</div>
                 </div>
                 <MyButton onClick={() => remove(post)}>Delete</MyButton>

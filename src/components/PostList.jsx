@@ -1,10 +1,18 @@
 import React from 'react';
 import PostItem from "./PostItem";
 import {AnimatePresence} from "framer-motion";
+import Loader2 from "./ui/loader/Loader2";
 
-const PostList = ({posts, title, remove}) => {
+const PostList = ({loading, posts, title, remove}) => {
 
-    if (!posts.length) {
+    if (loading) {
+        return (
+            <div className="post-container">
+                <Loader2/>
+            </div>
+        )
+
+    } else if (!posts.length) {
         return <h1 style={{textAlign: "center"}}>Posts not found!</h1>
     }
 

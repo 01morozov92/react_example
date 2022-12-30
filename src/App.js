@@ -1,16 +1,15 @@
 import "./styles/App.css"
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import PostList from "./components/PostList";
 import MyForm from "./components/MyForm";
 import MyFilter from "./components/ui/MyFilter";
 import MyModal from "./components/ui/modal/MyModal";
 import MyButton from "./components/ui/button/MyButton";
 import {useFilter} from "./components/hooks/useFilter";
-import PostService from "./api/PostsService";
-import Loader from "./components/ui/loader/Loader";
-import Loader2 from "./components/ui/loader/Loader2";
-import {useRequest} from "./components/hooks/useRequest";
 import PostsService from "./api/PostsService";
+import {useRequest} from "./components/hooks/useRequest";
+import {getPagesCount} from "./utils/pagesUtil";
+import Pagination from "./components/ui/pagination/Pagination";
 
 function App() {
 
@@ -18,14 +17,27 @@ function App() {
     const [modal, setModal] = useState(false)
     const [filter, setFilter] = useState({query: "", sort: ""})
     const filteredPosts = useFilter(posts, filter.sort, filter.query)
+    const [limit, setLimit] = useState(10)
+    const [page, setPage] = useState(1)
     const [loading, postError, getPosts] = useRequest(async () => {
-        const posts = await PostsService.getAll().then(response => response.data)
-        setPosts(posts)
+        const resp = await PostsService.getAll(limit, page).then()
+        setPosts(resp.data)
+        const pagesCount = getPagesCount(resp.headers["x-total-count"], limit)
+        setPageTotalCount(pagesCount)
     })
+    const [pageTotalCount, setPageTotalCount] = useState(0)
 
-    useEffect(async () => {
-        await getPosts()
-    }, [])
+    const pages = useMemo(() => {
+        const pagesArr = []
+        for (let i = 1; i <= pageTotalCount; i++) {
+            pagesArr.push(i)
+        }
+        return pagesArr
+    }, [pageTotalCount])
+
+    useEffect(() => {
+        getPosts().then()
+    }, [page])
 
     const createPost = (newPost) => {
         setPosts([...posts, newPost])
@@ -50,11 +62,8 @@ function App() {
                 postError &&
                 <h1>Error! ${postError}</h1>
             }
-            {loading ? <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
-                    <Loader2/>
-                </div>
-                : <PostList remove={deletePost} title="Posts" posts={filteredPosts}/>
-            }
+            <PostList loading={loading} remove={deletePost} title="Posts" posts={filteredPosts}/>
+            <Pagination setPage={setPage} page={page} pages={pages}/>
         </div>
     );
 }
