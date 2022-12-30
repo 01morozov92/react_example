@@ -24,9 +24,6 @@ const Navbar = () => {
                         to={"/Posts"}>Posts</NavLink>
                 </div>
             </div>
-            <div style={{textAlign: "center", marginTop: 50}}>
-                <h1>Main Page</h1>
-            </div>
         </div>
     );
 };
