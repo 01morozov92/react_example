@@ -1,13 +1,14 @@
 import "./styles/App.css"
-import {useEffect, useMemo, useState} from "react";
+import {useEffect, useState} from "react";
 import PostList from "./components/PostList";
 import MyForm from "./components/MyForm";
 import MyFilter from "./components/ui/MyFilter";
 import MyModal from "./components/ui/modal/MyModal";
 import MyButton from "./components/ui/button/MyButton";
 import {useFilter} from "./components/hooks/UseFilter";
-import axios from "axios";
 import PostService from "./api/PostsService";
+import Loader from "./components/ui/loader/Loader";
+import Loader2 from "./components/ui/loader/Loader2";
 
 function App() {
 
@@ -15,11 +16,16 @@ function App() {
     const [modal, setModal] = useState(false)
     const [filter, setFilter] = useState({query: "", sort: ""})
     const filteredPosts = useFilter(posts, filter.sort, filter.query)
+    const [loading, setLoading] = useState(false)
 
     useEffect(async () => {
-        const posts = await PostService.getAll()
-            .then(response => response.data)
-        setPosts(posts)
+        setLoading(true)
+        setTimeout(async () => {
+            const posts = await PostService.getAll()
+                .then(response => response.data)
+            setPosts(posts)
+            setLoading(false)
+        }, 1000)
     }, [])
 
     const createPost = (newPost) => {
@@ -41,7 +47,11 @@ function App() {
             </MyModal>
             <hr style={{margin: "15px 0"}}/>
             <MyFilter filter={filter} setFilter={setFilter}/>
-            <PostList remove={deletePost} title="Posts" posts={filteredPosts}/>
+            {loading ? <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+                    <Loader2/>
+                </div>
+                : <PostList remove={deletePost} title="Posts" posts={filteredPosts}/>
+            }
         </div>
     );
 }
